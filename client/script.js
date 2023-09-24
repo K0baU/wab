@@ -20,7 +20,8 @@ const log = (text) => {
 
 const conns = {};
 const chs = {};
-let creditOuts;
+let creditOuts = {}, onlines = {};
+const onlineMsg = "🟢オンライン";
 const targets = [];
 
 const dbReq = indexedDB.open("Storage", 35);
@@ -97,6 +98,12 @@ dbReq.onsuccess = (event) => {
         peerIdElm.append(peerIdSmr);
         peerIdSmr.append(record.id.slice(0, 4) + "...");
         peerIdElm.append(record.id);
+        const online = document.createElement("output");
+        peerLbl.append(online);
+        if (chs[record.id]) {
+            online.append(onlineMsg);
+        }
+        onlines[record.id] = online;
         const renameForm = document.createElement("form");
         peerLbl.append(renameForm);
         const renameInput = document.createElement("input"), renameBtn = document.createElement("button");
@@ -130,7 +137,6 @@ dbReq.onsuccess = (event) => {
                 });
                 break;
             case "credits":
-                creditOuts = {};
                 doc.creditForm.textContent = "";
                 dbOpr.for(store, displayNewPeer);
         }
@@ -335,11 +341,9 @@ dbReq.onsuccess = (event) => {
             const openConn = (id, ch) => {
                 ch.onopen = () => {
                     chs[id] = ch;
-                    add("peer", id);
                     dbOpr.for("contents", (value) => ch.send(JSON.stringify({ type: "content", body: value })));
                 };
                 ch.onmessage = (e) => receive(e, id);
-                ch.onclose = () => { delete chs[id] };
             };
             const setupConn = (id, description) => {
                 if (description && description.type == "answer") {
@@ -349,6 +353,22 @@ dbReq.onsuccess = (event) => {
                 }
                 // Create the local connection and its event listeners
                 const con = new RTCPeerConnection(config);
+                con.onconnectionstatechange = () => {
+                    log(con.connectionState);
+                    switch (con.connectionState) {
+                        case "connected":
+                            if (creditOuts[id]) {
+                                onlines[id].textContent = onlineMsg;
+                            } else {
+                                add("peer", id);
+                            }
+                            break;
+                        case "disconnected":
+                            onlines[id].textContent = "";
+                            delete chs[id];
+                            break;
+                    }
+                };
                 // Set up the ICE candidates for the two peers
                 con.onicecandidate = async e => {
                     if (!e.candidate) {
