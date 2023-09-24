@@ -1,0 +1,101 @@
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: gainsboro;
+        --txt: black;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: black;
+        --txt: gainsboro;
+    }
+}
+
+:root {
+    color-scheme: light dark;
+    background-color: var(--bg);
+    color: var(--txt);
+}
+
+form {
+    display: block;
+    --h: 1.5em;
+    height: var(--h);
+    --bd-rad: 0.5em;
+}
+
+#sendForm,
+#pmw {
+    font-size: xx-large;
+}
+
+#credits {
+    height: auto;
+}
+
+#message {
+    width: calc(100% - var(--h) - var(--bd-rad) - 1em);
+    padding-left: var(--bd-rad);
+}
+
+form>* {
+    display: inline-block;
+    box-sizing: border-box;
+    height: 100%;
+    margin: 1em;
+    font-size: inherit;
+    vertical-align: middle;
+}
+
+#credits>* {
+    height: auto;
+}
+
+input,
+button {
+    margin: 1px;
+    border: 2px solid var(--txt);
+}
+
+input {
+    border-radius: var(--bd-rad) 0 0 var(--bd-rad);
+    background-color: var(--bg);
+}
+
+input[type=radio] {
+    display: none;
+}
+
+#credits>label {
+    padding: 1em;
+    border: 1px solid;
+    border-radius: 1em;
+}
+
+#credits>input:checked+label {
+    border: 2px solid;
+}
+
+button {
+    background-color: var(--txt);
+    color: var(--bg);
+}
+
+form>button {
+    width: var(--h);
+}
+
+button:last-child {
+    width: calc(var(--h) + var(--bd-rad));
+    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
+}
+
+#amount {
+    width: 3em;
+    text-align: end;
+}
+
+#amount::placeholder {
+    color: var(--bg);
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC P2P</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="script.js" defer></script>
+</head>
+
+<body>
+    <details id="id">
+        <summary id="idSmr">ID:</summary>
+    </details>
+    <output id="log"></output>
+    <ul id="peerList"></ul>
+    <form id="sendForm">
+        <input type="text" name="message" id="message" inputmode="latin" size="60" maxlength="120" /><button>+</button>
+    </form>
+    <ul id="receivebox"></ul>
+    <form id="pmw">
+        <input type="number" id="amount" min="0" value="100"><button type="button" id="plus">+</button><button
+            type="button" id="minus">-</button><button type="button" id="withdraw">♻</button>
+    </form>
+    <form id="credits"></form>
+</body>
+
+</html>
