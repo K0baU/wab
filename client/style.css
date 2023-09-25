@@ -18,34 +18,73 @@
     color: var(--txt);
 }
 
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 16em 1fr 8em;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#left,
+#center {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: scroll;
+}
+
 form {
-    display: block;
     --h: 1.5em;
-    height: var(--h);
     --bd-rad: 0.5em;
 }
 
 #sendForm,
 #pmw {
+    width: 100%;
     font-size: xx-large;
 }
 
-#credits {
-    height: auto;
+#sendForm {
+    display: flex;
+}
+
+#pmw {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#credits,
+#receivebox {
+    flex: 1;
+    overflow: scroll;
 }
 
 #message {
-    width: calc(100% - var(--h) - var(--bd-rad) - 1em);
+    flex: 1;
     padding-left: var(--bd-rad);
+    overflow: hidden;
 }
 
 form>* {
-    display: inline-block;
     box-sizing: border-box;
-    height: 100%;
-    margin: 1em;
     font-size: inherit;
     vertical-align: middle;
+}
+
+form>label {
+    display: inline-block;
+    margin: 1em 0;
 }
 
 #credits>* {
@@ -82,20 +121,60 @@ button {
     color: var(--bg);
 }
 
-form>button {
-    width: var(--h);
-}
-
 button:last-child {
-    width: calc(var(--h) + var(--bd-rad));
     border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
 }
 
 #amount {
-    width: 3em;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    border-radius: var(--bd-rad) var(--bd-rad) 0 0;
     text-align: end;
 }
 
-#amount::placeholder {
-    color: var(--bg);
+#plus {
+    border-radius: 0 0 0 var(--bd-rad);
+}
+
+#withdraw {
+    border-radius: 0 0 var(--bd-rad) 0;
+}
+
+li {
+    list-style: none;
+}
+
+@media screen and (max-width: 960px) {
+
+    /* 960px以下に適用されるCSS（タブレット用） */
+    #left {
+        display: none;
+    }
+
+    #right {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 961px) {
+    footer {
+        display: none;
+    }
+}
+
+footer>ul {
+    display: flex;
+    padding: 0;
+}
+
+footer>ul>li {
+    flex: 1;
+    text-align: center;
+}
+
+footer>ul>li>button {
+    width: 100%;
+    height: 100%;
+    font-size: x-large;
+    vertical-align: middle;
 }

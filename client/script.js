@@ -1,6 +1,9 @@
 const host = document.location.host;
 
 const doc = {
+    left: document.getElementById('left'),
+    center: document.getElementById('center'),
+    right: document.getElementById('right'),
     sendForm: document.getElementById('sendForm'),
     messageInputBox: document.getElementById('message'),
     receiveBox: document.getElementById('receivebox'),
@@ -108,7 +111,7 @@ dbReq.onsuccess = (event) => {
         peerLbl.append(renameForm);
         const renameInput = document.createElement("input"), renameBtn = document.createElement("button");
         renameForm.append(renameInput, renameBtn);
-        renameInput.value = record.name;
+        renameInput.value = record.name == "" ? "名無しさん" : record.name;
         renameBtn.append("✎");
         renameForm.onsubmit = (e) => {
             e.preventDefault();
@@ -127,6 +130,7 @@ dbReq.onsuccess = (event) => {
         switch (store) {
             case "contents":
                 const newList = document.createElement("ul");
+                newList.id = "receivebox";
                 dbOpr.for(store, (value) => {
                     const li = document.createElement("li");
                     newList.append(li);
@@ -247,9 +251,11 @@ dbReq.onsuccess = (event) => {
             };
             doc.idSmr.append(pub.x.slice(0, 4) + "...");
             doc.idElm.append(pub.x + pub.y);
-            const socket = new WebSocket('wss://' + host);
+            const wshost = 'wss://' + host;
+            let socket = new WebSocket(wshost);
             const socketSend = (obj) => socket.send(JSON.stringify(obj));
             socket.onopen = () => {
+                log("socket opened");
                 socketSend({ type: "id", body: pub.x + pub.y });
             };
 
@@ -414,6 +420,11 @@ dbReq.onsuccess = (event) => {
                 }
             }
             socket.onmessage = (e) => receive(e);
+            socket.onclose = () => {
+                log("socket closed");
+                log("reconnecting to server");
+                socket = new WebSocket(wshost);
+            }
 
             // Set event listeners for user interface widgets
 
@@ -505,7 +516,6 @@ const jokes = [
     "キビダンゴ1つで、不信感が半分になる。鬼退治のためにたくさん用意しておこう。",
     "忘れられる権利などないのだよ、Mr.ロックハート。",
     "経験値がインフレするのは必然だ。expなんだから。",
-    "轟音が聞こえたが、気にせず続けろ。",
     "同志イーロンマスク万歳！",
     "AIの発達により、知能は予定外の急速分解を起こすだろう。",
     "インスタントコーヒーが418を駆逐する。",
@@ -514,3 +524,20 @@ const jokes = [
     "神は死んだ。が、バックアップを忘れなかった。"
 ];
 doc.messageInputBox.placeholder = jokes[Math.floor(Math.random() * jokes.length)];
+const hide = () => {
+    doc.left.style.display = "none";
+    doc.center.style.display = "none";
+    doc.right.style.display = "none";
+};
+document.getElementById("showLeft").onclick = () => {
+    hide();
+    doc.left.style.display = "block";
+}
+document.getElementById("showCenter").onclick = () => {
+    hide();
+    doc.center.style.display = "block";
+}
+document.getElementById("showRight").onclick = () => {
+    hide();
+    doc.right.style.display = "block";
+}
