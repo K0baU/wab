@@ -24,24 +24,30 @@ html {
 }
 
 body {
+    height: 100vh;
     margin: 0;
     padding: 0;
 }
 
 main {
-    display: grid;
-    grid-template-columns: 16em 1fr 8em;
-    height: 100vh;
     margin: 0;
     padding: 0;
+    overflow: scroll;
+}
+
+#left,
+#center,
+#right {
+    box-sizing: border-box;
+    padding: 1em;
+    overflow: scroll;
 }
 
 #left,
 #center {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow: scroll;
+    height: 100%;
 }
 
 form {
@@ -70,6 +76,11 @@ form {
     overflow: scroll;
 }
 
+#receivebox {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 #message {
     flex: 1;
     padding-left: var(--bd-rad);
@@ -82,9 +93,26 @@ form>* {
     vertical-align: middle;
 }
 
+main li,
+form>label {
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid;
+    border-radius: 1em;
+    overflow-wrap: break-word;
+}
+
 form>label {
     display: inline-block;
-    margin: 1em 0;
+    width: 100%;
+}
+
+form>label>form {
+    display: flex;
+}
+
+form>label>form>input {
+    min-width: 0;
 }
 
 #credits>* {
@@ -92,12 +120,14 @@ form>label {
 }
 
 input,
+textarea,
 button {
     margin: 1px;
     border: 2px solid var(--txt);
 }
 
-input {
+input,
+textarea {
     border-radius: var(--bd-rad) 0 0 var(--bd-rad);
     background-color: var(--bg);
 }
@@ -106,10 +136,8 @@ input[type=radio] {
     display: none;
 }
 
-#credits>label {
-    padding: 1em;
-    border: 1px solid;
-    border-radius: 1em;
+textarea {
+    height: 4lh;
 }
 
 #credits>input:checked+label {
@@ -140,13 +168,24 @@ button:last-child {
     border-radius: 0 0 var(--bd-rad) 0;
 }
 
+main ul {
+    padding: 0 0 1em;
+}
+
 li {
     list-style: none;
 }
 
 @media screen and (max-width: 960px) {
+    body {
+        display: flex;
+        flex-direction: column;
+    }
 
-    /* 960px以下に適用されるCSS（タブレット用） */
+    main {
+        flex: 1;
+    }
+
     #left {
         display: none;
     }
@@ -157,6 +196,12 @@ li {
 }
 
 @media screen and (min-width: 961px) {
+    main {
+        display: grid;
+        grid-template-columns: 16em 1fr 8em;
+        height: 100%;
+    }
+
     footer {
         display: none;
     }
@@ -164,6 +209,7 @@ li {
 
 footer>ul {
     display: flex;
+    margin: 0;
     padding: 0;
 }
 
