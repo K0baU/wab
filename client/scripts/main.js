@@ -19,7 +19,8 @@ window.onerror = log;
 const onlineMsg = "🟢オンライン";
 const aPtn = ">>(\\S{32})(?:\\s|$)";
 const tagPtn = "#([^#\\s]+)(?:\\s|$)";
-let chs = {}, creditOuts = {}, onlines = {}, blobs = {};
+const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+let conns = {}, creditOuts = {}, onlines = {}, blobs = {};
 const addDOM = (par, children) => {
     for (const child of children) {
         if (child.tag) {
@@ -48,9 +49,12 @@ const decodeId = (str) => {
     return arr.toString();
 }
 const cid = async rec => (new Uint8Array(await crypto.subtle.digest("SHA-256", rec.type ? await rec.arrayBuffer() : rec))).toString();
-const sendFile = async (ch, file) => {
-    ch.send(await file.arrayBuffer());
-    ch.send(JSON.stringify({ type: "mime", body: { cid: await cid(file), type: file.type } }));
+const sendFile = (con, file) => {
+    const ch = con.createDataChannel("");
+    ch.onopen = async () => {
+        ch.send(await file.arrayBuffer());
+        ch.send(JSON.stringify({ type: "mime", body: { cid: await cid(file), type: file.type } }));
+    }
 };
 
 const init = [];
@@ -86,14 +90,6 @@ dbReq.onsuccess = async (event) => {
     };
     for (const rec of init) {
         if (Object.prototype.toString.call(rec) != "[object Blob]") continue;
-        switch (rec.type.split("/")[0]) {
-            case "text":
-                if (!await rec.text()) continue;
-                break;
-
-            default:
-                break;
-        }
         dbOpr.crud("contents", "add", { id: await cid(rec), body: rec });
     }
     const replaceWithBtn = (str, ptns) => {
@@ -137,6 +133,16 @@ dbReq.onsuccess = async (event) => {
                             URL.revokeObjectURL(img.src);
                         };
                         addDOM(li, [img]);
+                        break;
+                    case "video":
+                        const video = document.createElement("video");
+                        video.src = URL.createObjectURL(file);
+                        video.controls = true;
+                        video.onload = () => {
+                            URL.revokeObjectURL(video.src);
+                        };
+                        addDOM(li, [video]);
+                        break;
                     default:
                         break;
                 }
@@ -156,7 +162,7 @@ dbReq.onsuccess = async (event) => {
         const peerIdElm = document.createElement("details");
         addDOM(peerIdElm, [{ tag: "summary", content: record.id.slice(0, 4) + "..." }, record.id]);
         const online = document.createElement("output");
-        if (chs[record.id]) {
+        if (conns[record.id]) {
             online.append(onlineMsg);
         }
         onlines[record.id] = online;
@@ -232,7 +238,7 @@ dbReq.onsuccess = async (event) => {
                     else
                         dbOpr.crud("contents", "add", { id, body }, addIndex);
                 });
-                for (const id in chs) sendFile(chs[id], body);
+                for (const id in conns) sendFile(conns[id], body);
                 break;
             default:
                 break;
@@ -258,7 +264,6 @@ dbReq.onsuccess = async (event) => {
     }
     // credits
     {
-        const ts = new Map();
         db.transaction(["keypairs"]).objectStore("keypairs").openCursor().onsuccess = async (event) => {
             const cursor = event.target.result;
             let user, isNew;
@@ -284,18 +289,17 @@ dbReq.onsuccess = async (event) => {
                 let socket = new WebSocket(wshost);
                 const socketSend = (obj) => socket.send(JSON.stringify(obj));
 
-                const targets = [];
-                const receive = async (e, sender) => {
+                const receive = async e => {
                     switch (typeof e.data) {
                         case "string":
                             const data = JSON.parse(e.data);
-                            const tid = data.body.id;
                             switch (data.type) {
                                 case "peer":
                                     const id = data.body;
                                     if (id == pub.x + pub.y) {
                                         break;
                                     }
+                                    log("offer")
                                     setupConn(id);
                                     break;
                                 case "description":
@@ -318,6 +322,7 @@ dbReq.onsuccess = async (event) => {
                                         (new TextEncoder()).encode(data.body.descriptionStr),
                                     )) {
                                         const description = JSON.parse(data.body.descriptionStr);
+                                        log("answer")
                                         setupConn(data.body.pub.x + data.body.pub.y, description);
                                     };
                                     break;
@@ -337,19 +342,9 @@ dbReq.onsuccess = async (event) => {
                             break;
                     }
                 };
-                const openConn = (id, ch) => {
-                    ch.onopen = () => {
-                        chs[id] = ch;
-                        dbOpr.for(db.transaction("contents").objectStore("contents").openCursor(), async file => sendFile(ch, file));
-                    };
-                    ch.onmessage = (e) => receive(e, id);
-                };
-                const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
-                const conns = {};
                 const setupConn = (id, description) => {
                     if (description && description.type == "answer") {
                         conns[id].setRemoteDescription(description);
-                        delete conns[id];
                         return;
                     }
                     // Create the local connection and its event listeners
@@ -366,12 +361,12 @@ dbReq.onsuccess = async (event) => {
                                 break;
                             case "disconnected":
                                 onlines[id].textContent = "";
-                                delete chs[id];
                                 break;
                         }
                     };
                     // Set up the ICE candidates for the two peers
                     con.onicecandidate = async e => {
+                        log("ice");
                         if (!e.candidate) {
                             socketSend({
                                 type: "transport", body: {
@@ -393,19 +388,18 @@ dbReq.onsuccess = async (event) => {
                             });
                         }
                     }
+                    con.ondatachannel = e => {
+                        e.channel.onmessage = receive;
+                    };
                     if (!description) {
                         conns[id] = con;
-                        // Create the data channel and establish its event listeners
-                        openConn(id, con.createDataChannel("sendChannel"))
-
+                        con.createDataChannel("");
                         con.createOffer()
                             .then(offer => {
                                 con.setLocalDescription(offer);
-                            })
+                            });
                     } else {
-                        con.ondatachannel = (event) => {
-                            openConn(id, event.channel);
-                        };
+                        log("createAnswer");
                         new Promise(resolve => { resolve(description) })
                             .then((offer) => con.setRemoteDescription(offer))
                             .then(() => con.createAnswer())

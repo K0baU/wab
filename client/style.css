@@ -118,7 +118,7 @@ form>label {
     overflow-wrap: break-word;
 }
 
-#receivebox>li>img {
+#receivebox>li>* {
     max-width: 100%;
 }
 
