@@ -16,6 +16,11 @@
     color-scheme: light dark;
     background-color: var(--bg);
     color: var(--txt);
+    --bd-rad: 0.5em;
+}
+
+.invisible {
+    display: none;
 }
 
 html {
@@ -43,6 +48,10 @@ main {
     overflow: scroll;
 }
 
+#right {
+    overflow-wrap: break-word;
+}
+
 #left,
 #center {
     display: flex;
@@ -52,7 +61,6 @@ main {
 
 form {
     --h: 1.5em;
-    --bd-rad: 0.5em;
 }
 
 #sendForm,
@@ -67,7 +75,7 @@ form {
 
 #pmw {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 
 #credits,
@@ -79,6 +87,14 @@ form {
 #receivebox {
     display: flex;
     flex-direction: column-reverse;
+}
+
+#receivebox>li>p>button {
+    border-radius: var(--bd-rad);
+}
+
+#upload {
+    border-radius: var(--bd-rad) 0 0 var(--bd-rad);
 }
 
 #message {
@@ -102,6 +118,10 @@ form>label {
     overflow-wrap: break-word;
 }
 
+#receivebox>li>img {
+    max-width: 100%;
+}
+
 form>label {
     display: inline-block;
     width: 100%;
@@ -113,6 +133,12 @@ form>label>form {
 
 form>label>form>input {
     min-width: 0;
+    border-radius: var(--bd-rad) 0 0 var(--bd-rad);
+}
+
+#sendForm button:last-child,
+form>label>form>button {
+    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
 }
 
 #credits>* {
@@ -128,7 +154,6 @@ button {
 
 input,
 textarea {
-    border-radius: var(--bd-rad) 0 0 var(--bd-rad);
     background-color: var(--bg);
 }
 
@@ -149,10 +174,6 @@ button {
     color: var(--bg);
 }
 
-button:last-child {
-    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
-}
-
 #amount {
     grid-column-start: 1;
     grid-column-end: 4;
@@ -164,7 +185,7 @@ button:last-child {
     border-radius: 0 0 0 var(--bd-rad);
 }
 
-#withdraw {
+#minus {
     border-radius: 0 0 var(--bd-rad) 0;
 }
 
@@ -198,7 +219,7 @@ li {
 @media screen and (min-width: 961px) {
     main {
         display: grid;
-        grid-template-columns: 16em 1fr 8em;
+        grid-template-columns: 16em 1fr 16em;
         height: 100%;
     }
 
