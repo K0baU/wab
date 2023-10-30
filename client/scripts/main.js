@@ -16,6 +16,7 @@ const log = (text) => {
     doc.logElm.append(p);
 };
 window.onerror = log;
+const wshost = "wss://wab.sabae.cc";
 const onlineMsg = "🟢オンライン";
 const aPtn = ">>(\\S{32})(?:\\s|$)";
 const tagPtn = "#([^#\\s]+)(?:\\s|$)";
@@ -285,7 +286,6 @@ dbReq.onsuccess = async (event) => {
                     db.transaction(["keypairs"], "readwrite").objectStore("keypairs").add(user, pub.x + pub.y);
                 doc.idSmr.append(pub.x.slice(0, 4) + "...");
                 doc.idElm.append(pub.x + pub.y);
-                const wshost = 'wss://' + document.location.host;
                 let socket = new WebSocket(wshost);
                 const socketSend = (obj) => socket.send(JSON.stringify(obj));
 
