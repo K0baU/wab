@@ -21,7 +21,7 @@ const onlineMsg = "🟢オンライン";
 const aPtn = ">>(\\S{32})(?:\\s|$)";
 const tagPtn = "#([^#\\s]+)(?:\\s|$)";
 const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
-let conns = {}, creditOuts = {}, onlines = {}, blobs = {};
+let conns = {}, creditOuts = {}, onlines = {}, mimes = {};
 const addDOM = (par, children) => {
     for (const child of children) {
         if (child.tag) {
@@ -56,8 +56,8 @@ const sendFile = (con, file) => {
     const chid = crypto.randomUUID();
     ch.onopen = async () => {
         const ch = chs.get(chid);
-        ch.send(await file.arrayBuffer());
         ch.send(JSON.stringify({ type: "mime", body: { cid: await cid(file), type: file.type } }));
+        ch.send(await file.arrayBuffer());
         chs.delete(chid);
     }
     chs.set(chid,ch);
@@ -332,18 +332,19 @@ dbReq.onsuccess = async (event) => {
                                     };
                                     break;
                                 case "mime":
-                                    if (blobs[data.body.cid]) {
-                                        const blob = new Blob([blobs[data.body.cid]], { type: data.body.type });
-                                        add("content", blob);
-                                    } else log("no data received");
-                                    delete blobs[data.body.cid];
+                                    mimes[data.body.cid] = data.body.type;
                                     break;
                                 default:
                                     break;
                             }
                             break;
                         default:
-                            blobs[await cid(e.data)] = e.data;
+                            const id = await cid(e.data);
+                            if (mimes[id]) {
+                                const blob = new Blob([e.data], { type: mimes[id] });
+                                add("content", blob);
+                            } else log("no mime received");
+                            delete mimes[id];
                             break;
                     }
                 };
