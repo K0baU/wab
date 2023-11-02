@@ -64,7 +64,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 93);
+const dbReq = indexedDB.open("Storage", 94);
 dbReq.onerror = (event) => {
     log(event.target.error);
 };
