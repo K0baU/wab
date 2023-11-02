@@ -64,7 +64,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 94);
+const dbReq = indexedDB.open("Storage", 95);
 dbReq.onerror = (event) => {
     log(event.target.error);
 };
@@ -462,7 +462,9 @@ dbReq.onupgradeneeded = (event) => {
     const db = event.target.result;
     const tx = event.target.transaction;
     const createContentsStore = async () => {
-        db.createObjectStore("contents");
+        const contents = db.createObjectStore("contents");
+        contents.createObjectStore("date", "date");
+        contents.createObjectStore("tag", "tag");
     };
     if (event.oldVersion == 0) createContentsStore();
     else tx.objectStore("contents").openCursor().onsuccess = e => {
@@ -476,7 +478,6 @@ dbReq.onupgradeneeded = (event) => {
             createContentsStore();
         }
     };
-    let index;
     try {
         db.deleteObjectStore("index");
     } catch (error) { }
