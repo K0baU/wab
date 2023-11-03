@@ -227,7 +227,7 @@ dbReq.onsuccess = async (event) => {
                     if (rec) return;
                     const newRec = { id, body, date: Date.now() };
                     if(body.type == "text/plain")
-                        newRec.tag = Array.from(await(body.text()).matchAll(tagPtn))
+                        newRec.tag = Array.from((await body.text()).matchAll(tagPtn))
                             .map(result => result[1]);
                     dbOpr.crud("contents", "add", newRec);
                 });
