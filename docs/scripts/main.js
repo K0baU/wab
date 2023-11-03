@@ -109,6 +109,7 @@ dbReq.onsuccess = async (event) => {
             , str);
     };
     const displayNewContent = id => {
+        log("displayNewContent");
         const li = document.createElement("li");
         doc.contents.append(li);
         dbOpr.crud("contents", "get", id, async result => {
