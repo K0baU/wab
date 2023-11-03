@@ -64,7 +64,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 96);
+const dbReq = indexedDB.open("Storage", 97);
 dbReq.onerror = (event) => {
     log(event.target.error);
 };
@@ -224,8 +224,12 @@ dbReq.onsuccess = async (event) => {
             case "content":
                 const id = await cid(body);
                 dbOpr.crud("contents", "get", id, rec => {
-                    if (!rec)
-                        dbOpr.crud("contents", "add", { id, body, date: Date.now() }, addIndex);
+                    if (rec) return;
+                    const newRec = { id, body, date: Date.now() };
+                    if(body.type == "text/plain")
+                        newRec.tag
+                            = Array.from(body.text().matchAll(tagPtn)).map(result => result[1]);
+                    dbOpr.crud("contents", "add", newRec);
                 });
                 for (const id in conns) sendFile(conns[id], body);
                 break;
@@ -464,7 +468,7 @@ dbReq.onupgradeneeded = (event) => {
     const createContentsStore = async () => {
         const contents = db.createObjectStore("contents");
         contents.createIndex("date", "date");
-        contents.createIndex("tag", "tag");
+        contents.createIndex("tag", "tag", { multiEntry: true });
     };
     if (event.oldVersion == 0) createContentsStore();
     else tx.objectStore("contents").openCursor().onsuccess = e => {
