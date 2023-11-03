@@ -64,7 +64,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 95);
+const dbReq = indexedDB.open("Storage", 96);
 dbReq.onerror = (event) => {
     log(event.target.error);
 };
@@ -463,8 +463,8 @@ dbReq.onupgradeneeded = (event) => {
     const tx = event.target.transaction;
     const createContentsStore = async () => {
         const contents = db.createObjectStore("contents");
-        contents.createObjectStore("date", "date");
-        contents.createObjectStore("tag", "tag");
+        contents.createIndex("date", "date");
+        contents.createIndex("tag", "tag");
     };
     if (event.oldVersion == 0) createContentsStore();
     else tx.objectStore("contents").openCursor().onsuccess = e => {
