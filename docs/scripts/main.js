@@ -223,7 +223,7 @@ dbReq.onsuccess = async (event) => {
                 break;
             case "content":
                 const id = await cid(body);
-                dbOpr.crud("contents", "get", id, rec => {
+                dbOpr.crud("contents", "get", id, await rec => {
                     if (rec) return;
                     const newRec = { id, body, date: Date.now() };
                     if(body.type == "text/plain")
