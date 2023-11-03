@@ -206,7 +206,7 @@ dbReq.onsuccess = async (event) => {
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
             log("default view");
             dbOpr.for(db.transaction("contents").objectStore("contents").index("date")
-                .openCursor(undefined, "prev"), (value,key) => displayNewContent(key));
+                .openCursor(/*undefined, "prev"*/), (value,key) => displayNewContent(key));
         }
     };
     const displayPeers = () => dbOpr.for(
