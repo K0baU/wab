@@ -49,7 +49,9 @@ const decodeId = (str) => {
     }
     return arr.toString();
 }
-const cid = async rec => (new Uint8Array(await crypto.subtle.digest("SHA-256", rec.type ? await rec.arrayBuffer() : rec))).toString();
+const cid = async rec =>
+    (new Uint8Array(await crypto.subtle.digest("SHA-256",
+        rec.type ? await rec.arrayBuffer() : rec))).toString();
 const chs = new Map();
 const sendFile = (con, file) => {
     const ch = con.createDataChannel("");
@@ -65,15 +67,11 @@ const sendFile = (con, file) => {
 
 const init = [];
 const dbReq = indexedDB.open("Storage", 97);
-dbReq.onerror = (event) => {
-    log(event.target.error);
-};
+dbReq.onerror = event => log(event.target.error);
 dbReq.onsuccess = async (event) => {
     log("database opened");
     const db = event.target.result;
-    db.onerror = (event) => {
-        log(`Database error: ${event.target.error}`);
-    };
+    db.onerror = event => log(`Database error: ${event.target.error}`);
     const dbOpr = {
         for: (openCursor, f, end) => {
             const req = openCursor;
@@ -197,16 +195,21 @@ dbReq.onsuccess = async (event) => {
         const tag = doc.messageInputBox.value.match(tagPtn);
         if (!tag) return false;
         dbOpr.for(
-            db.transaction("contents").objectStore("contents").index("tag").openKeyCursor(IDBKeyRange.only(tag[1])), (value,key) => displayNewContent(key));
+            db.transaction("contents").objectStore("contents").index("tag")
+                .openKeyCursor(IDBKeyRange.only(tag[1])), (value,key) => displayNewContent(key));
         return true;
     };
     const display = () => {
+        log("display");
         doc.contents.textContent = "";
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
-            dbOpr.for(db.transaction("contents").objectStore("contents").index("date").openCursor(undefined, "prev"), (value,key) => displayNewContent(key));
+            log("default view");
+            dbOpr.for(db.transaction("contents").objectStore("contents").index("date")
+                .openCursor(undefined, "prev"), (value,key) => displayNewContent(key));
         }
     };
-    const displayPeers = () => dbOpr.for(db.transaction("credits").objectStore("credits").openCursor(), displayNewPeer);
+    const displayPeers = () => dbOpr.for(
+      db.transaction("credits").objectStore("credits").openCursor(), displayNewPeer);
     display();
     dbOpr.for(db.transaction("credits").objectStore("credits").openCursor(), (value) => {
         if (value.name == "" && value.credit == 0) {
@@ -215,7 +218,7 @@ dbReq.onsuccess = async (event) => {
     }, displayPeers);
     doc.messageInputBox.oninput = display;
     const add = async (type, body) => {
-        log("add " + type)
+        log("add " + type);
         switch (type) {
             case "peer":
                 const newPeer = { id: body, name: "", credit: 0 };
@@ -229,9 +232,9 @@ dbReq.onsuccess = async (event) => {
                     if(body.type == "text/plain")
                         newRec.tag = Array.from((await body.text()).matchAll(tagPtn))
                             .map(result => result[1]);
-                    dbOpr.crud("contents", "add", newRec);
+                    dbOpr.crud("contents", "add", newRec, display);
+                    for (const id in conns) sendFile(conns[id], body);
                 });
-                for (const id in conns) sendFile(conns[id], body);
                 break;
             default:
                 break;
