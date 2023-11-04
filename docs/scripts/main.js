@@ -73,8 +73,7 @@ dbReq.onsuccess = async (event) => {
     const db = event.target.result;
     db.onerror = event => log(`Database error: ${event.target.error}`);
     const dbOpr = {
-        for: (openCursor, f, end) => {
-            const req = openCursor;
+        for: (req, f, end) => {
             req.onsuccess = (event) => {
                 const cursor = event.target.result;
                 if (cursor) {
@@ -205,8 +204,8 @@ dbReq.onsuccess = async (event) => {
         doc.contents.textContent = "";
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
             log("default view");
-            dbOpr.for(db.transaction("contents").objectStore("contents").index("date")
-                .openCursor(/*undefined, "prev"*/), (value,key) => displayNewContent(key));
+            dbOpr.for(db.transaction("contents").objectStore("contents")/*.index("date")*/
+                .openCursor(undefined, "prev"), (value,key) => displayNewContent(key));
         }
     };
     const displayPeers = () => dbOpr.for(
