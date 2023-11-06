@@ -66,7 +66,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 97);
+const dbReq = indexedDB.open("Storage", 98);
 dbReq.onerror = event => log(event.target.error);
 dbReq.onsuccess = async (event) => {
     log("database opened");
@@ -91,10 +91,7 @@ dbReq.onsuccess = async (event) => {
                 };
         }
     };
-    for (const rec of init) {
-        if (Object.prototype.toString.call(rec) != "[object Blob]") continue;
-        dbOpr.crud("contents", "add", { id: await cid(rec), body: rec });
-    }
+    for (const rec of init) dbOpr.crud("contents", "add", rec);
     const replaceWithBtn = (str, ptns) => {
         return ptns.reduce((prev, ptn) =>
             prev.replaceAll(RegExp(ptn, "g"), match =>
@@ -108,7 +105,6 @@ dbReq.onsuccess = async (event) => {
             , str);
     };
     const displayNewContent = id => {
-        log("displayNewContent");
         const li = document.createElement("li");
         doc.contents.append(li);
         dbOpr.crud("contents", "get", id, async result => {
@@ -204,8 +200,8 @@ dbReq.onsuccess = async (event) => {
         doc.contents.textContent = "";
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
             log("default view");
-            dbOpr.for(db.transaction("contents").objectStore("contents")/*.index("date")*/
-                .openCursor(undefined, "prev"), (value,key) => displayNewContent(key));
+            dbOpr.for(db.transaction("contents").objectStore("contents").index("date")
+                .openKeyCursor(undefined, "prev"), (value,key) => displayNewContent(key));
         }
     };
     const displayPeers = () => dbOpr.for(
