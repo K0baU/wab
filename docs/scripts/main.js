@@ -104,45 +104,43 @@ dbReq.onsuccess = async (event) => {
             )
             , str);
     };
-    const displayNewContent = id => {
+    const displayNewContent = result => {
         const li = document.createElement("li");
-        doc.contents.append(li);
-        dbOpr.crud("contents", "get", id, async result => {
-            addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
-            const file = result.body;
-            switch (file.type.split("/")[0]) {
-                case "text":
-                    const p = document.createElement("p");
-                    p.innerHTML = replaceWithBtn(await file.text(), [aPtn, tagPtn]);
-                    addDOM(li, [p]);
-                    li.onclick = () => {
-                        if (getSelection().toString()) return;
-                        doc.messageInputBox.value += `>>${encodeId(id)} `;
-                        doc.messageInputBox.dispatchEvent(new InputEvent('input'));
-                        doc.messageInputBox.focus();
-                    };
-                    break;
-                case "image":
-                    const img = document.createElement("img");
-                    img.src = URL.createObjectURL(file);
-                    img.onload = () => {
-                        URL.revokeObjectURL(img.src);
-                    };
-                    addDOM(li, [img]);
-                    break;
-                case "video":
-                    const video = document.createElement("video");
-                    video.src = URL.createObjectURL(file);
-                    video.controls = true;
-                    video.onload = () => {
-                        URL.revokeObjectURL(video.src);
-                    };
-                    addDOM(li, [video]);
-                    break;
-                default:
-                    break;
-            }
-        });
+        doc.contents.append(li);    
+        addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
+        const file = result.body;
+        switch (file.type.split("/")[0]) {
+            case "text":
+                const p = document.createElement("p");
+                p.innerHTML = replaceWithBtn(await file.text(), [aPtn, tagPtn]);
+                addDOM(li, [p]);
+                li.onclick = () => {
+                    if (getSelection().toString()) return;
+                    doc.messageInputBox.value += `>>${encodeId(id)} `;
+                    doc.messageInputBox.dispatchEvent(new InputEvent('input'));
+                    doc.messageInputBox.focus();
+                };
+                break;
+            case "image":
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(img.src);
+                };
+                addDOM(li, [img]);
+                break;
+            case "video":
+                const video = document.createElement("video");
+                video.src = URL.createObjectURL(file);
+                video.controls = true;
+                video.onload = () => {
+                    URL.revokeObjectURL(video.src);
+                };
+                addDOM(li, [video]);
+                break;
+            default:
+                break;
+        }
     };
     const displayNewPeer = (record) => {
         const radio = document.createElement("input");
@@ -180,11 +178,10 @@ dbReq.onsuccess = async (event) => {
     const getThread = (content) => {
         const anchor = content.match(aPtn);
         if (!anchor) return false;
-        log("getThread");
         const id = decodeId(anchor[1]);
-        displayNewContent(id);
-        dbOpr.crud("contents", "get", id, async file => {
-            getThread(await file.text());
+        dbOpr.crud("contents", "get", id, async rec => {
+            displayNewContent(rec);
+            getThread(await rec.body.text());
         });
         return true;
     };
@@ -193,7 +190,7 @@ dbReq.onsuccess = async (event) => {
         if (!tag) return false;
         dbOpr.for(
             db.transaction("contents").objectStore("contents").index("tag")
-                .openKeyCursor(IDBKeyRange.only(tag[1])), (value,key) => displayNewContent(key));
+                .openCursor(IDBKeyRange.only(tag[1])), displayNewContent);
         return true;
     };
     const display = () => {
@@ -202,7 +199,7 @@ dbReq.onsuccess = async (event) => {
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
             log("default view");
             dbOpr.for(db.transaction("contents").objectStore("contents").index("date")
-                .openKeyCursor(undefined, "prev"), (value,key) => displayNewContent(key));
+                .openCursor(undefined, "prev"), displayNewContent);
         }
     };
     const displayPeers = () => dbOpr.for(
