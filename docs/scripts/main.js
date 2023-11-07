@@ -180,6 +180,7 @@ dbReq.onsuccess = async (event) => {
     const getThread = (content) => {
         const anchor = content.match(aPtn);
         if (!anchor) return false;
+        log("getThread");
         const id = decodeId(anchor[1]);
         displayNewContent(id);
         dbOpr.crud("contents", "get", id, async file => {
