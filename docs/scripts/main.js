@@ -108,7 +108,7 @@ dbReq.onsuccess = async (event) => {
         const li = document.createElement("li");
         doc.contents.append(li);
         dbOpr.crud("contents", "get", id, async result => {
-            addDOM(li, [{ tag: "span", content: (new Date(cursor.value.date)).toLocaleString("ja") }]);
+            addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
             const file = result.body;
             switch (file.type.split("/")[0]) {
                 case "text":
