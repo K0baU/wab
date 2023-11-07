@@ -66,7 +66,7 @@ const sendFile = (con, file) => {
 };
 
 const init = [];
-const dbReq = indexedDB.open("Storage", 98);
+const dbReq = indexedDB.open("Storage", 99);
 dbReq.onerror = event => log(event.target.error);
 dbReq.onsuccess = async (event) => {
     log("database opened");
@@ -465,7 +465,7 @@ dbReq.onupgradeneeded = (event) => {
     const db = event.target.result;
     const tx = event.target.transaction;
     const createContentsStore = async () => {
-        const contents = db.createObjectStore("contents");
+        const contents = db.createObjectStore("contents", { keyPath: "id" });
         contents.createIndex("date", "date");
         contents.createIndex("tag", "tag", { multiEntry: true });
     };
