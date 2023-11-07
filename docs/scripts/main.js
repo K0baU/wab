@@ -104,7 +104,7 @@ dbReq.onsuccess = async (event) => {
             )
             , str);
     };
-    const displayNewContent = result => {
+    const displayNewContent = async result => {
         const li = document.createElement("li");
         doc.contents.append(li);    
         addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
