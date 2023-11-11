@@ -10,7 +10,7 @@ window.onerror = log;
         log("display");
         doc.contents.textContent = "";
         if (!getThread(doc.messageInputBox.value)) if (!getTag()) {
-            opr.for({ store: "contents", index:"date", range: IDBKeyRange.only(tag[1])}),
+            opr.for({ store: "contents", index:"date", range: IDBKeyRange.only(tag[1]),
                 direction: "prev", f: displayContent});
         }
     };
