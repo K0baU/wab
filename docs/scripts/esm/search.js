@@ -2,7 +2,6 @@ import { doc } from "./doc.js";
 import { displayContent } from "./content-to-html.js";
 import { decodeId } from "./id.js";
 import { opr } from "./db.js";
-import { displayContent } from "./content-to-html.js";
 
 const aPtn = ">>(\\S{32})(?:\\s|$)";
 export const tagPtn = "#([^#\\s]+)(?:\\s|$)";
