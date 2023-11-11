@@ -1,5 +1,5 @@
-import { doc, addDOM } from "/esm/doc.js";
-import { opr } from "/esm/db.js";
+import { doc, addDOM } from "/scripts/esm/doc.js";
+import { opr } from "/scripts/esm/db.js";
 
 export const displayPeer = (record) => {
         const radio = document.createElement("input");

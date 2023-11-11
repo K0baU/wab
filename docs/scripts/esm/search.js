@@ -1,8 +1,8 @@
-import { doc } from "/esm/doc.js";
-import { displayContent } from "/esm/content-to-html.js";
-import { decodeId } from "/esm/id.js";
-import { opr } from "/esm/db.js";
-import { displayContent } from "/esm/content-to-html.js";
+import { doc } from "/scripts/esm/doc.js";
+import { displayContent } from "/scripts/esm/content-to-html.js";
+import { decodeId } from "/scripts/esm/id.js";
+import { opr } from "/scripts/esm/db.js";
+import { displayContent } from "/scripts/esm/content-to-html.js";
 
 const aPtn = ">>(\\S{32})(?:\\s|$)";
 export const tagPtn = "#([^#\\s]+)(?:\\s|$)";

@@ -1,9 +1,9 @@
-import { log } from "/esm/log.js";
-import { doc } from "/esm/doc.js";
-import { opr } from "/esm/db.js";
-import { cid } from "/esm/id.js";
-import { displayPeer } from "/esm/peer-to-html.js";
-import { addContent } from "/esm/add-content.js";
+import { log } from "/scripts/esm/log.js";
+import { doc } from "/scripts/esm/doc.js";
+import { opr } from "/scripts/esm/db.js";
+import { cid } from "/scripts/esm/id.js";
+import { displayPeer } from "/scripts/esm/peer-to-html.js";
+import { addContent } from "/scripts/esm/add-content.js";
 
 const wshost = "wss://wab.sabae.cc";
 const onlineMsg = "🟢オンライン";
