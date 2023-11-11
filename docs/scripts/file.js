@@ -1,5 +1,5 @@
-import { doc } from "/scripts/esm/doc.js";
-import { addContent } from "/scripts/esm/add-content.js";
+import { doc } from "./esm/doc.js";
+import { addContent } from "./esm/add-content.js";
 
 const handleFiles = () => {
             log("upload file");
