@@ -36,8 +36,7 @@ dbReq.onsuccess = e => {
     log("database opened");
     e.target.result.onerror = event => log(event.target.error);
     db = e.target.result;
-    for(const q in queue) {
-        console.log(q)
+    for(const q of queue) {
         opr[q.f](q.args);
     }
 };
