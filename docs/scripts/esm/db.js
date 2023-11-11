@@ -60,7 +60,7 @@ dbReq.onupgrade = (event) => {
             db.deleteObjectStore("contents");
             createContentsStore();
         }
-    });
+    );
     try {
         db.deleteObjectStore("index");
     } catch (error) { }
