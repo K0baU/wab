@@ -13,7 +13,7 @@ export const getThread = (content) => {
         opr.crud({ store: "contents", op: "get", rec: id, callback: async rec => {
             displayContent(rec);
             getThread(await rec.body.text());
-        });
+        } });
         return true;
     };
 export const getTag = () => {
