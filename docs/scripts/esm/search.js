@@ -19,6 +19,6 @@ export const getThread = (content) => {
 export const getTag = () => {
         const tag = doc.messageInputBox.value.match(tagPtn);
         if (!tag) return false;
-        opr.for({ store: "contents", index:"tag", range: IDBKeyRange.only(tag[1])), f: displayContent});
+        opr.for({ store: "contents", index:"tag", range: IDBKeyRange.only(tag[1]), f: displayContent});
         return true;
     };
