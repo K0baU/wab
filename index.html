@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Wab</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="scripts/main.js" defer></script>
+    <script type="module" src="scripts/submitTxt.js" defer></script>
+    <script type="module" src="scripts/file.js" defer></script>
+    <script type="module" src="scripts/responsive.js" defer></script>
+    <script type="module" src="scripts/joke.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <div id="left">
+            <details id="id">
+                <summary id="idSmr">ID:</summary>
+            </details>
+            <form id="credits"></form>
+            <form id="pmw">
+                <input type="number" id="amount" min="0" value="100" placeholder="418">
+                <button type="button" id="plus">+</button><button type="button" id="minus">-</button>
+            </form>
+        </div>
+        <div id="center">
+            <ul id="receivebox"></ul>
+            <form id="sendForm">
+                <input type="file" multiple id="file" class="invisible"><button type="button"
+                    id="upload">📁</button><textarea type="text" name="message" id="message" inputmode="latin" size="60"
+                    maxlength="120"></textarea><button>✔</button>
+            </form>
+        </div>
+        <div id="right">
+            <output id="log"></output>
+        </div>
+    </main>
+    <footer>
+        <ul>
+            <li><button type="button" id="showLeft">❤️</button></li>
+            <li><button type="button" id="showCenter">💬</button></li>
+            <li><button type="button" id="showRight">📝</button></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
