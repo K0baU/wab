@@ -2,20 +2,10 @@ import { log } from "./log.js";
 
 let db;
 const queue = [];
-const dbReq = indexedDB.open("Storage", 99);
-dbReq.onsuccess = e => {
-    log("database opened");
-    e.target.result.onerror = event => log(event.target.error);
-    db = e.target.result;
-    for(const q in queue) {
-        q.f(q.args);
-    }
-};
-dbReq.onerror = event => log(event.target.error);
 export const opr = {
         for: ({ store, index, range, direction, f, end }) => {
             if(!db) {
-                queue.push({ f: opr.for, args: { store, index, range, direction, f, end } })
+                queue.push({ f: "for", args: { store, index, range, direction, f, end } })
                 return;
             };
             const objStore = db.transaction(store).objectStore(store);
@@ -31,7 +21,7 @@ export const opr = {
         },
         crud: ({ store, op, rec, callback }) => {
             if(!db) {
-                queue.push({ f: opr.crud, args: { store, op, rec, callback } })
+                queue.push({ f: "crud", args: { store, op, rec, callback } })
                 return;
             };
             const objStore = db.transaction(store, op == "get" ? "readonly" : "readwrite").objectStore(store);
@@ -41,6 +31,16 @@ export const opr = {
                 };
         }
     };
+const dbReq = indexedDB.open("Storage", 99);
+dbReq.onsuccess = e => {
+    log("database opened");
+    e.target.result.onerror = event => log(event.target.error);
+    db = e.target.result;
+    for(const q in queue) {
+        opr[q.f](q.args);
+    }
+};
+dbReq.onerror = event => log(event.target.error);
 dbReq.onupgrade = (event) => {
     log("upgrade DB");
     const db = event.target.result;
