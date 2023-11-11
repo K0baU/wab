@@ -19,5 +19,5 @@ window.onerror = log;
         if (value.name == "" && value.credit == 0) {
             opr.crud({store:"credits",op:"delete"});
         }
-    }, end: () => opr.for({ store: "credits", f: displayPeer }); });
+    }, end: () => opr.for({ store: "credits", f: displayPeer }) });
     doc.messageInputBox.oninput = display;
