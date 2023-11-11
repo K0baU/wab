@@ -1,4 +1,4 @@
-import { log } from "/scripts/esm/log.js";
+import { log } from "./log.js";
 
 let db;
 const queue = [];

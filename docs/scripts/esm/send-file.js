@@ -1,4 +1,4 @@
-import { cid } from "/scripts/esm/id.js";
+import { cid } from "./id.js";
 
 const chs = new Map();
 export const sendFile = (con, file) => {

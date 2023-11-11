@@ -1,5 +1,5 @@
-import { doc, addDOM } from "/scripts/esm/doc.js";
-import { encodeId } from "/scripts/esm/id.js";
+import { doc, addDOM } from "./doc.js";
+import { encodeId } from "./id.js";
 const HTMLify = (str, ptns) => {
         return ptns.reduce((prev, ptn) =>
             prev.replaceAll(RegExp(ptn, "g"), match =>
