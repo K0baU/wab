@@ -1,9 +1,9 @@
-import { log } from "/esm/log.js";
-import { doc } from "/esm/doc.js";
-import { opr } from "/esm/db.js";
-import { displayContent } from "/esm/content-to-html.js";
-import { displayPeer } from "/esm/peer-to-html.js";
-import { getThread, getTag } from "/esm/search.js";
+import { log } from "/scripts/esm/log.js";
+import { doc } from "/scripts/esm/doc.js";
+import { opr } from "/scripts/esm/db.js";
+import { displayContent } from "/scripts/esm/content-to-html.js";
+import { displayPeer } from "/scripts/esm/peer-to-html.js";
+import { getThread, getTag } from "/scripts/esm/search.js";
 
 window.onerror = log;
     const display = () => {
