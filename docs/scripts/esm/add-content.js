@@ -1,6 +1,6 @@
-import { opr } from "db.js";
-import { sendFile } from "send-file.js";
-import { conns } from "credits.js";
+import { opr } from "/esm/db.js";
+import { sendFile } from "/esm/send-file.js";
+import { conns } from "/esm/credits.js";
 
 export const addContent = async (type, body) => {
                 const id = await cid(body);
