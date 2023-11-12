@@ -8,6 +8,7 @@ export const opr = {
                 queue.push({ f: "for", args: { store, index, range, direction, f, end } })
                 return;
             };
+            console.log(store);
             const objStore = db.transaction(store).objectStore(store);
             const req = index ? objStore.index(index).openCursor(range) : objStore.openCursor(range);
             req.onsuccess = (event) => {
@@ -37,7 +38,6 @@ dbReq.onsuccess = e => {
     e.target.result.onerror = event => log(event.target.error);
     db = e.target.result;
     for(const q of queue) {
-        console.log(q.args);
         opr[q.f](q.args);
     }
 };
