@@ -50,7 +50,7 @@ export const displayContent = async result => {
                 li.onclick = () => {
                     if (getSelection().toString()) return;
                     log("reply");
-                    doc.messageInputBox.value += `>>${encodeId(id)} `;
+                    doc.messageInputBox.value += `>>${encodeId(result.id)} `;
                     doc.messageInputBox.dispatchEvent(new InputEvent('input'));
                     doc.messageInputBox.focus();
                 };
