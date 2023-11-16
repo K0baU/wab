@@ -1,5 +1,6 @@
 import { doc } from "./esm/doc.js";
 import { display } from "./esm/display.js";
+import { displayPeer } from "./esm/peer-to-html.js";
 import { opr } from "./esm/db.js";
 
 window.onerror = log;
