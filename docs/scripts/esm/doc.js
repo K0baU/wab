@@ -11,14 +11,14 @@ export const doc = {
     credits: document.getElementById('credits'),
 };
 
-export const addDOM = (par, children) => {
+export const addDOM = (par, children, add = "append") => {
     for (const child of children) {
         if (child.tag) {
             const elm = document.createElement(child.tag);
             elm.append(child.content);
-            par.append(elm);
+            par[add](elm);
         } else {
-            par.append(child);
+            par[add](child);
         }
     }
 };

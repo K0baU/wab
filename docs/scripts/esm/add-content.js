@@ -1,6 +1,7 @@
 import { cid } from "./id.js";
 import { opr } from "./db.js";
 import { tagPtn } from "./search.js";
+import { display } from "./display.js";
 import { sendFile } from "./send-file.js";
 import { conns } from "./credits.js";
 
