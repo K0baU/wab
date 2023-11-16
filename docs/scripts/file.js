@@ -1,3 +1,4 @@
+import { log } from "./esm/log.js";
 import { doc } from "./esm/doc.js";
 import { addContent } from "./esm/add-content.js";
 
