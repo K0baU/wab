@@ -1,3 +1,4 @@
+import { log } from "./log.js";
 import { doc, addDOM } from "./doc.js";
 import { encodeId } from "./id.js";
 import { aPtn, tagPtn } from "./search.js";
@@ -25,12 +26,6 @@ export const displayContent = async result => {
                 const p = document.createElement("p");
                 p.innerHTML = HTMLify(await file.text(), [aPtn, tagPtn]);
                 addDOM(li, [p]);
-                li.onclick = () => {
-                    if (getSelection().toString()) return;
-                    doc.messageInputBox.value += `>>${encodeId(id)} `;
-                    doc.messageInputBox.dispatchEvent(new InputEvent('input'));
-                    doc.messageInputBox.focus();
-                };
                 break;
             case "image":
                 const img = document.createElement("img");
@@ -52,4 +47,11 @@ export const displayContent = async result => {
             default:
                 break;
         }
+                li.onclick = () => {
+                    if (getSelection().toString()) return;
+                    log("reply");
+                    doc.messageInputBox.value += `>>${encodeId(id)} `;
+                    doc.messageInputBox.dispatchEvent(new InputEvent('input'));
+                    doc.messageInputBox.focus();
+                };
     };
