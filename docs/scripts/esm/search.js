@@ -3,7 +3,7 @@ import { displayContent } from "./content-to-html.js";
 import { decodeId } from "./id.js";
 import { opr } from "./db.js";
 
-const aPtn = ">>(\\S{32})(?:\\s|$)";
+export const aPtn = ">>(\\S{32})(?:\\s|$)";
 export const tagPtn = "#([^#\\s]+)(?:\\s|$)";
 
 export const getThread = (content) => {

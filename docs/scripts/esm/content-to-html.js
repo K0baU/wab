@@ -1,5 +1,7 @@
 import { doc, addDOM } from "./doc.js";
 import { encodeId } from "./id.js";
+import { aPtn, tagPtn } from "./search.js";
+
 const HTMLify = (str, ptns) => {
         return ptns.reduce((prev, ptn) =>
             prev.replaceAll(RegExp(ptn, "g"), match =>
