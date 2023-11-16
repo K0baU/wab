@@ -12,5 +12,5 @@ export const addContent = async (type, body) => {
                             .map(result => result[1]);
                     opr.crud({ store: "contents", op: "add", rec: newRec, callback: display });
                     for (const id in conns) sendFile(conns[id], body);
-                });
+                } });
     };
