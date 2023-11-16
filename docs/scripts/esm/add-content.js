@@ -1,3 +1,4 @@
+import { cid } from "./cid.js";
 import { opr } from "./db.js";
 import { sendFile } from "./send-file.js";
 import { conns } from "./credits.js";
