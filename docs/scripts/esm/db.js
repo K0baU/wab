@@ -33,7 +33,7 @@ export const opr = {
                 };
         }
     };
-const dbReq = indexedDB.open("Storage", 100);
+const dbReq = indexedDB.open("Storage", 102);
 dbReq.onsuccess = e => {
     log("database opened");
     e.target.result.onerror = event => log(event.target.error);
