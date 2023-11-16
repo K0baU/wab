@@ -1,7 +1,9 @@
+import { log } from "./esm/log.js";
 import { doc } from "./esm/doc.js";
 import { addContent } from "./esm/add-content.js";
 
 const submitContent = async () => {
+    log("submitContent");
             const str = doc.messageInputBox.value;
             const content = new Blob([str], { type: "text/plain" });
             addContent("content", content);
