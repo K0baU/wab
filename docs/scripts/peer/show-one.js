@@ -1,7 +1,7 @@
 import { doc, addDOM } from "../lib/doc.js";
 import { opr } from "../lib/db.js";
 
-export const displayPeer = rec => {
+export const showOne = rec => {
     const radio = document.createElement("input");
     radio.type = "radio";
     radio.name = "target";
