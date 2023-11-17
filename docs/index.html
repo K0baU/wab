@@ -6,35 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Wab</title>
     <link rel="stylesheet" href="style.css" />
-    <script type="module" src="scripts/main.js" defer></script>
-    <script type="module" src="scripts/submitTxt.js" defer></script>
-    <script type="module" src="scripts/file.js" defer></script>
-    <script type="module" src="scripts/responsive.js" defer></script>
-    <script type="module" src="scripts/joke.js" defer></script>
+    <script type="module" src="scripts/responsive.js"></script>
+    <script type="module" src="scripts/peer/show-all.js"></script>
+    <script type="module" src="scripts/content/show-all.js"></script>
+    <script type="module" src="scripts/content/submit/file.js"></script>
+    <script type="module" src="scripts/content/submit/txt.js"></script>
+    <script type="module" src="scripts/joke.js"></script>
 </head>
 
 <body>
     <main>
         <div id="left">
-            <details id="id">
-                <summary id="idSmr">ID:</summary>
+            <details id="idDetails">
+                <summary id="idSummary">ID:</summary>
             </details>
-            <form id="credits"></form>
+            <form id="peersForm"></form>
             <form id="pmw">
-                <input type="number" id="amount" min="0" value="100" placeholder="418">
+                <input type="number" id="amountInput" min="0" value="100" placeholder="418">
                 <button type="button" id="plus">+</button><button type="button" id="minus">-</button>
             </form>
         </div>
         <div id="center">
-            <ul id="receivebox"></ul>
+            <ul id="contentsUl"></ul>
             <form id="sendForm">
-                <input type="file" multiple id="file" class="invisible"><button type="button"
-                    id="upload">📁</button><textarea type="text" name="message" id="message" inputmode="latin" size="60"
+                <input type="file" multiple id="fileInput" class="invisible"><button type="button"
+                    id="uploadBtn">📁</button><textarea type="text" name="message" id="messageInput" inputmode="latin" size="60"
                     maxlength="120"></textarea><button>✔</button>
             </form>
         </div>
         <div id="right">
-            <output id="log"></output>
+            <output id="logOutput"></output>
         </div>
     </main>
     <footer>
