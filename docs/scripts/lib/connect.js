@@ -2,7 +2,7 @@ import { log } from "./log.js";
 import { doc } from "./doc.js";
 import { opr } from "./db.js";
 import { cid } from "../content/id.js";
-import { showOne } from "../peer/show-one.js";
+import { showAPeer } from "../peer/show-a-peer.js";
 import { addContent } from "../content/add.js";
 
 const wshost = "wss://wab.sabae.cc";
@@ -102,7 +102,7 @@ let creditOuts = {}, onlines = {}, mimes = {};
                                     onlines[id].textContent = onlineMsg;
                                 } else {
                                     const newPeer = { id, name: "", credit: 0 };
-                                    opr.crud({ store: "peers", op: "add", rec: newPeer, callback: showOne });
+                                    opr.crud({ store: "peers", op: "add", rec: newPeer, callback: showAPeer });
                                 }
                                 break;
                             case "disconnected":
