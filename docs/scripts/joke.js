@@ -1,3 +1,5 @@
+import { doc } from "./lib/doc.js";
+
 const jokes = [
     "バズるとは、拡散回数が5の倍数になること。15の倍数ならフィズバズるという。",
     "ああ、NaNでもない。",
@@ -13,4 +15,4 @@ const jokes = [
     "文化は暴力である。",
     "神は数式を解かない。"
 ];
-document.getElementById("message").placeholder = jokes[Math.floor(Math.random() * jokes.length)];
+doc("messageInput").placeholder = jokes[Math.floor(Math.random() * jokes.length)];
