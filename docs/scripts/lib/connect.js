@@ -28,8 +28,8 @@ let creditOuts = {}, onlines = {}, mimes = {};
             crypto.subtle.exportKey("jwk", user.publicKey).then((pub) => {
                 if (isNew)
                     opr.crud({ store:"keypairs", op:"add", rec:{body:user, id:pub.x + pub.y} });
-                doc.idSmr.append(pub.x.slice(0, 4) + "...");
-                doc.idElm.append(pub.x + pub.y);
+                doc("idSummary").append(pub.x.slice(0, 4) + "...");
+                doc("idDetails").append(pub.x + pub.y);
                 let socket = new WebSocket(wshost);
                 const socketSend = (obj) => socket.send(JSON.stringify(obj));
 
@@ -171,8 +171,8 @@ let creditOuts = {}, onlines = {}, mimes = {};
             });
         }});
         const increaseCredit = (multiplier) => {
-            const id = (new FormData(doc.credits)).get("target");
-            const amount = Number(doc.amountIn.value);
+            const id = (new FormData(doc("peersForm"))).get("target");
+            const amount = Number(doc("amountInput").value);
             opr.crud({ store: "peers", op: "get", rec: id, callback: rec => {
                 const newRec = rec;
                 newRec.credit += amount * multiplier;
