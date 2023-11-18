@@ -1,6 +1,6 @@
 import { doc } from "../lib/doc.js";
 import { opr } from "../lib/db.js";
-import { showAContent } from "./show-one.js";
+import { showAContent } from "./show-a-content.js";
 import { decodeId } from "./id.js";
 import { aPtn, tagPtn } from "./patterns.js";
 
