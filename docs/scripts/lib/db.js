@@ -31,7 +31,7 @@ export const opr = {
                 };
         }
     };
-const dbReq = indexedDB.open("Storage", 105);
+const dbReq = indexedDB.open("Storage", 106);
 dbReq.onsuccess = e => {
     log("database opened");
     e.target.result.onerror = event => log(event.target.error);
@@ -41,7 +41,7 @@ dbReq.onsuccess = e => {
     }
 };
 dbReq.onerror = event => log(event.target.error);
-dbReq.onupgrade = event => {
+dbReq.onupgradeneeded = event => {
     log("upgrade DB");
     const db = event.target.result;
     const tx = event.target.transaction;
