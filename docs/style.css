@@ -78,29 +78,28 @@ form {
     grid-template-columns: repeat(2, 1fr);
 }
 
-#credits,
-#receivebox {
+#peersForm,
+#contentsUl {
     flex: 1;
     overflow: scroll;
 }
 
-#receivebox {
+#contentsUl {
     display: flex;
     flex-direction: column-reverse;
 }
 
-#receivebox>li>p>button {
+#contentsUl>li>p>button {
     border-radius: var(--bd-rad);
 }
 
-#upload {
+#uploadBtn {
     border-radius: var(--bd-rad) 0 0 var(--bd-rad);
 }
 
-#message {
+#messageInput {
     flex: 1;
     padding-left: var(--bd-rad);
-    overflow: hidden;
 }
 
 form>* {
@@ -118,7 +117,7 @@ form>label {
     overflow-wrap: break-word;
 }
 
-#receivebox>li>* {
+#contentsUl>li>* {
     max-width: 100%;
 }
 
@@ -141,7 +140,7 @@ form>label>form>button {
     border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
 }
 
-#credits>* {
+#peersForm>* {
     height: auto;
 }
 
@@ -165,7 +164,7 @@ textarea {
     height: 4lh;
 }
 
-#credits>input:checked+label {
+#peersForm>input:checked+label {
     border: 2px solid;
 }
 
@@ -174,7 +173,7 @@ button {
     color: var(--bg);
 }
 
-#amount {
+#amountInput {
     grid-column-start: 1;
     grid-column-end: 4;
     border-radius: var(--bd-rad) var(--bd-rad) 0 0;

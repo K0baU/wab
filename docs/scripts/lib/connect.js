@@ -1,9 +1,9 @@
 import { log } from "./log.js";
 import { doc } from "./doc.js";
 import { opr } from "./db.js";
-import { cid } from "./id.js";
-import { displayPeer } from "./peer-to-html.js";
-import { addContent } from "./add-content.js";
+import { cid } from "../content/id.js";
+import { showAPeer } from "../peer/show-a-peer.js";
+import { addContent } from "../content/add.js";
 
 const wshost = "wss://wab.sabae.cc";
 const onlineMsg = "🟢オンライン";
@@ -28,8 +28,8 @@ let creditOuts = {}, onlines = {}, mimes = {};
             crypto.subtle.exportKey("jwk", user.publicKey).then((pub) => {
                 if (isNew)
                     opr.crud({ store:"keypairs", op:"add", rec:{body:user, id:pub.x + pub.y} });
-                doc.idSmr.append(pub.x.slice(0, 4) + "...");
-                doc.idElm.append(pub.x + pub.y);
+                doc("idSummary").append(pub.x.slice(0, 4) + "...");
+                doc("idDetails").append(pub.x + pub.y);
                 let socket = new WebSocket(wshost);
                 const socketSend = (obj) => socket.send(JSON.stringify(obj));
 
@@ -102,7 +102,7 @@ let creditOuts = {}, onlines = {}, mimes = {};
                                     onlines[id].textContent = onlineMsg;
                                 } else {
                                     const newPeer = { id, name: "", credit: 0 };
-                                    opr.crud({ store: "credits", op: "add", rec: newPeer, callback: displayPeer });
+                                    opr.crud({ store: "peers", op: "add", rec: newPeer, callback: showAPeer });
                                 }
                                 break;
                             case "disconnected":
@@ -171,12 +171,12 @@ let creditOuts = {}, onlines = {}, mimes = {};
             });
         }});
         const increaseCredit = (multiplier) => {
-            const id = (new FormData(doc.credits)).get("target");
-            const amount = Number(doc.amountIn.value);
-            opr.crud({ store: "credits", op: "get", rec: id, callback: rec => {
+            const id = (new FormData(doc("peersForm"))).get("target");
+            const amount = Number(doc("amountInput").value);
+            opr.crud({ store: "peers", op: "get", rec: id, callback: rec => {
                 const newRec = rec;
                 newRec.credit += amount * multiplier;
-                opr.crud({ store: "credits", op: "put", rec: newRec, callback: () => {
+                opr.crud({ store: "peers", op: "put", rec: newRec, callback: () => {
                     log(
                         `${rec.name}: ${rec.credit} => ${newRec.credit} (${multiplier >= 0 ? "+" : "-"}${amount})`
                     );

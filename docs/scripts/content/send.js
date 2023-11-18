@@ -1,7 +1,7 @@
 import { cid } from "./id.js";
 
 const chs = new Map();
-export const sendFile = (con, file) => {
+export const send = (con, file) => {
     const ch = con.createDataChannel("");
     const chid = crypto.randomUUID();
     ch.onopen = async () => {

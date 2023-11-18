@@ -8,6 +8,7 @@ export const opr = {
                 queue.push({ f: "for", args: { store, index, range, direction, f, end } })
                 return;
             };
+            log(store);
             const objStore = db.transaction(store).objectStore(store);
             const req = index ? objStore.index(index).openCursor(range, direction) : objStore.openCursor(range, direction);
             req.onsuccess = (event) => {
@@ -31,7 +32,7 @@ export const opr = {
                 };
         }
     };
-const dbReq = indexedDB.open("Storage", 102);
+const dbReq = indexedDB.open("Storage", 106);
 dbReq.onsuccess = e => {
     log("database opened");
     e.target.result.onerror = event => log(event.target.error);
@@ -41,7 +42,7 @@ dbReq.onsuccess = e => {
     }
 };
 dbReq.onerror = event => log(event.target.error);
-dbReq.onupgrade = (event) => {
+dbReq.onupgradeneeded = event => {
     log("upgrade DB");
     const db = event.target.result;
     const tx = event.target.transaction;
@@ -65,7 +66,10 @@ dbReq.onupgrade = (event) => {
         db.deleteObjectStore("index");
     } catch (error) { }
     try {
-        db.createObjectStore("credits", { keyPath: "id" });
+        db.deleteObjectStore("credits");
+    } catch (error) { }
+    try {
+        db.createObjectStore("peers", { keyPath: "id" });
     } catch (error) { }
     try {
         db.createObjectStore("keypairs");

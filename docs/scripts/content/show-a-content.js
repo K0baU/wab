@@ -1,7 +1,7 @@
-import { log } from "./log.js";
-import { doc, addDOM } from "./doc.js";
+import { log } from "../lib/log.js";
+import { doc, addDOM } from "../lib/doc.js";
 import { encodeId } from "./id.js";
-import { aPtn, tagPtn } from "./search.js";
+import { aPtn, tagPtn } from "./patterns.js";
 
 const HTMLify = (str, ptns) => {
         return ptns.reduce((prev, ptn) =>
@@ -16,9 +16,9 @@ const HTMLify = (str, ptns) => {
             , str);
     };
 
-export const displayContent = async result => {
+export const showAContent = async result => {
         const li = document.createElement("li");
-        doc.contents.append(li);    
+        doc("contentsUl").append(li);    
         addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
         const file = result.body;
         switch (file.type.split("/")[0]) {
@@ -47,11 +47,11 @@ export const displayContent = async result => {
             default:
                 break;
         }
-                li.onclick = () => {
-                    if (getSelection().toString()) return;
-                    log("reply");
-                    doc.messageInputBox.value += `>>${encodeId(result.id)} `;
-                    doc.messageInputBox.dispatchEvent(new InputEvent('input'));
-                    doc.messageInputBox.focus();
-                };
+        li.onclick = () => {
+            if (getSelection().toString()) return;
+            const messageInput = doc("messageInput");
+            messageInput.value += `>>${encodeId(result.id)} `;
+            messageInput.dispatchEvent(new InputEvent('input'));
+            messageInput.focus();
+        };
     };
