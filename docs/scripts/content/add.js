@@ -1,7 +1,7 @@
 import { cid } from "./id.js";
 import { opr } from "../lib/db.js";
 import { tagPtn } from "./patterns.js";
-import { showAll } from "./show-all.js";
+import { showContents } from "./show-contents.js";
 import { send } from "./send.js";
 import { conns } from "../lib/connect.js";
 
@@ -13,7 +13,7 @@ export const addContent = async (type, body) => {
                     if(body.type == "text/plain")
                         newRec.tag = Array.from((await body.text()).matchAll(tagPtn))
                             .map(result => result[1]);
-                    opr.crud({ store: "contents", op: "add", rec: newRec, callback: showAll });
+                    opr.crud({ store: "contents", op: "add", rec: newRec, callback: showContents });
                     for (const id in conns) sendFile(conns[id], body);
                 } });
     };
