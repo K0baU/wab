@@ -30,4 +30,4 @@ export const showContents = () => {
 };
 
 showContents();
-messageInput.value = showContents;
+messageInput.oninput = showContents;
